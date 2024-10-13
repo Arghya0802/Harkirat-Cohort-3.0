@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Practie ToDo Application</title>
+</head>
+
+<body>
+    <input type="text" placeholder="Add your Todo here....">
+    <button onclick="addTodo()">Add Todo!!!</button>
+</body>
+<script>
+    let cnt = 1;
+
+    function addTodo() {
+        const inputEl = document.querySelector("input").value;
+
+        const spanEl = document.createElement("span");
+        const buttonEl = document.createElement("button");
+        spanEl.innerHTML = inputEl;
+        buttonEl.innerHTML = "Delete!"
+
+        // buttonEl.addEventListener("click", removeTodo);
+        buttonEl.setAttribute("onclick", `removeTodo(${cnt})`);
+
+        const newTodo = document.createElement("div");
+        newTodo.setAttribute("id", cnt);
+
+        newTodo.appendChild(spanEl);
+        newTodo.appendChild(buttonEl);
+
+        // newTodo.innerHTML = `<span> ${inputEl} </span> <button onclick="removeTodo(${cnt})">Delete Todo!!!   </button>`
+
+        cnt++;
+        document.querySelector("body").appendChild(newTodo);
+    }
+
+    function removeTodo(index) {
+        const todo = document.getElementById(index);
+
+        document.querySelector("body").removeChild(todo);
+        // todo.parentElement.removeChild(todo) ;
+    }
+
+</script>
+
+</html>

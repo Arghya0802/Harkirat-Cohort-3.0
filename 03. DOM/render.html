@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Practice ToDo Application using Rendering</title>
+</head>
+
+<body>
+    <input type="text" placeholder="Add your Todo here....">
+    <button onclick="addTodo()">Add Todo!!!</button>
+    <button onclick="removeLastTodo()">Remove Last Todo!!</button>
+    <button onclick="removeFirstTodo()">Remove First Todo!!</button>
+    <div id="todo"></div>
+
+</body>
+<script>
+    let cnt = 1;
+    let todos = [];
+
+    function addTodo() {
+        todos.push({
+            title: document.querySelector("input").value
+        })
+
+        render();
+    }
+
+    function removeLastTodo() {
+        todos.splice(todos.length - 1, 1);
+        render()
+    }
+
+    function removeFirstTodo() {
+        todos.splice(0, 1);
+        render();
+    }
+
+    function removeTodo(index) {
+        todos = todos.filter(id => id !== index);
+
+        const todo = document.getElementById(index);
+
+        document.querySelector("#todo").removeChild(todo);
+        // todo.parentElement.removeChild(todo) ;
+    }
+
+    function createTodoComponent(title, index) {
+        const spanEl = document.createElement("span");
+        spanEl.innerHTML = title;
+
+        const buttonEl = document.createElement("button");
+        buttonEl.innerHTML = "Delete!"
+        buttonEl.setAttribute("onclick", `removeTodo(${index})`)
+
+        const newTodoDiv = document.createElement("div");
+        newTodoDiv.setAttribute("id", `${index}`);
+        newTodoDiv.appendChild(spanEl);
+        newTodoDiv.appendChild(buttonEl);
+
+        // document.querySelector("#todo").appendChild(newTodoDiv);
+        return newTodoDiv;
+    }
+
+    function render() {
+        document.querySelector("#todo").innerHTML = "";
+
+        for (let i = 0; i < todos.length; i++) {
+            const newTodoDiv = createTodoComponent(todos[i].title, i + 1);
+
+            document.getElementById("todo").appendChild(newTodoDiv);
+        }
+    }
+</script>
+
+</html>

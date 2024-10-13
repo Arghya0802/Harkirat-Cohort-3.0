@@ -1,0 +1,26 @@
+body {
+  background-color: #0e0e0e;
+  color: wheat;
+}
+
+span {
+  color: white;
+  font-weight: 500;
+  font-size: 20;
+}
+
+.topLink {
+  color: gray;
+  cursor: pointer;
+  padding-left: 10px;
+  padding-top: 7px;
+  text-decoration: none;
+}
+
+/* .left-child {
+  background-color: green;
+}
+
+.right-child {
+  background-color: red;
+} */
