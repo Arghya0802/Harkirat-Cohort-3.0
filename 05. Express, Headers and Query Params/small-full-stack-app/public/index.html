@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Small FullStack Application</title>
+</head>
+
+<body>
+    <input type="text" id="first" placeholder="First Number">
+    <input type="text" id="second" placeholder="Second Number">
+    <button onclick="findSum()">Find Sum</button>
+    <div id="res"></div>
+</body>
+<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+<script>
+    async function findSum() {
+        const a = document.getElementById("first").value
+        const b = document.getElementById("second").value
+
+        const ans = await axios.post("http://localhost:3000/sum", {
+            a, b
+        })
+
+        // console.log(ans);
+        // const result = ans.
+        document.getElementById("res").innerHTML = `<h2> Their sum is: ${ans.data.result}`
+
+        setTimeout(function () {
+            document.getElementById("res").innerHTML = "";
+        }, 5000)
+    }
+</script>
+
+</html>
