@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Small FullStack Authenticated App</title>
+</head>
+
+<body>
+    <div id="signup">
+        <input type="text" placeholder="Username" id="signup-username">
+        <input type="password" placeholder="Password" id="signup-password">
+        <button onclick="signUp()">Submit</button>
+    </div>
+
+    <div id="signin">
+        <input type="text" placeholder="Username" id="signin-username">
+        <input type="password" placeholder="Password" id="signin-password">
+        <button onclick="signIn()">Submit</button>
+    </div>
+
+    <div id="user-information">
+        <h3>User Information: </h3>
+    </div>
+</body>
+
+<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+
+<script>
+
+    // window.onload = function () {
+    //     displayUserInfo()
+    // }
+
+    async function signUp() {
+        try {
+            const username = document.getElementById("signup-username")
+            const password = document.getElementById("signup-password")
+
+            const response = await axios.post("http://localhost:3000/signup", {
+                username: username.value,
+                password: password.value
+            })
+
+            console.log(response);
+
+            const resSpan = document.createElement("span");
+
+            if (response.data.success === true) {
+                resSpan.innerHTML = `<h3>User signed-up successfully!✅</h3>`
+
+            } else {
+                resSpan.innerHTML = `<h3>Un-successful sign-up!!!❌</h3>`
+            }
+
+            document.getElementById("signup").appendChild(resSpan);
+
+            setTimeout(() => {
+                resSpan.innerHTML = "";
+                username.value = "";
+                password.value = "";
+            }, 5000)
+        } catch (error) {
+            console.log(error);
+            const resSpan = document.createElement("span");
+            resSpan.innerHTML = `<h3>Un-successful sign-up!!!❌</h3>`
+            document.getElementById("signup").appendChild(resSpan);
+
+            setTimeout(() => {
+                resSpan.innerHTML = "";
+                username.value = "";
+                password.value = "";
+            }, 5000)
+        }
+    }
+
+    async function signIn() {
+        try {
+            const username = document.getElementById("signin-username")
+            const password = document.getElementById("signin-password")
+
+            const response = await axios.post("http://localhost:3000/signin", {
+                username: username.value,
+                password: password.value
+            })
+
+            console.log("Inside SignIn() function");
+            console.log(response);
+
+            const resSpan = document.createElement("span");
+
+            if (response.data.success === true) {
+                resSpan.innerHTML = `<h3>User signed-in successfully!✅</h3>`
+
+            } else {
+                resSpan.innerHTML = `<h3>Un-successful sign-in!!!❌</h3>`
+            }
+
+            console.log(response.data.token);
+
+            document.getElementById("signin").appendChild(resSpan);
+            localStorage.setItem("token", response.data.token);
+
+            setTimeout(() => {
+                resSpan.innerHTML = "";
+                username.value = ""
+                password.value = ""
+            }, 1000)
+
+            displayUserInfo();
+
+        } catch (error) {
+            console.log(error.message);
+
+            const resSpan = document.createElement("span");
+            resSpan.innerHTML = `<h3>Un-successful sign-in!!!❌</h3>`
+            document.getElementById("signin").appendChild(resSpan);
+
+            setTimeout(() => {
+                resSpan.innerHTML = "";
+                username.value = "";
+                password.value = "";
+            }, 5000)
+        }
+    }
+
+    async function displayUserInfo() {
+        try {
+            console.log("Inside displayUserInfo function");
+
+            const token = localStorage.getItem("token");
+
+            const response = await axios.get("http://localhost:3000/me", {
+                headers: { token }
+            })
+
+            const username = document.createElement("span");
+            username.innerHTML = `<h3> Username: ${response.data.username} </h3>`
+            username.setAttribute("id", "username");
+
+            const password = document.createElement("span");
+            password.innerHTML = `<h3> Password: ${response.data.password} </h3>`
+            password.setAttribute("id", "password");
+
+            const userInfo = document.getElementById("user-information");
+            const userNameDiv = document.getElementById("username");
+            const passwordDiv = document.getElementById("password");
+
+            if (userNameDiv) {
+                userInfo.removeChild(userNameDiv)
+                userInfo.removeChild(passwordDiv)
+            }
+
+            userInfo.appendChild(username)
+            userInfo.appendChild(password);
+
+        } catch (error) {
+            console.log(error);
+        }
+    }
+
+</script>
+
+</html>

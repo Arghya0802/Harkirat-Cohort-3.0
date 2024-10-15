@@ -4,6 +4,7 @@ const express = require("express");
 const app = express();
 
 app.use(express.json());
+app.use(express.static("./public"));
 
 let users = []; // In memory users DB
 
@@ -134,6 +135,12 @@ app.post("/signup", function (req, res) {
   const { username, password } = req.body;
   //   const token = req.token;
 
+  if (!username || !password) {
+    return res.status(400).json({
+      message: "Both username and password is required",
+      success: false,
+    });
+  }
   const user = users.find(
     (user) => user.username === username && user.password === password
   );
