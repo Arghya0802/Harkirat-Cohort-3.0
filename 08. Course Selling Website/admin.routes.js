@@ -6,10 +6,10 @@ const {
   adminLogin,
   getAdminCourses,
 } = require("./admin.controller");
-const { adminAuth } = require("./middlewares");
+const { adminAuth, rateLimiter } = require("./middlewares");
 
-router.post("/signup", adminSignup);
-router.post("/login", adminLogin);
-router.get("/courses", adminAuth, getAdminCourses);
+router.post("/signup", rateLimiter, adminSignup);
+router.post("/login", rateLimiter, adminLogin);
+router.get("/courses", rateLimiter, adminAuth, getAdminCourses);
 
 module.exports = router;

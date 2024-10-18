@@ -1,11 +1,11 @@
 const express = require("express");
 const { signup, login, getUserCourses } = require("./user.controller");
-const { userAuth } = require("./middlewares");
+const { userAuth, rateLimiter } = require("./middlewares");
 const router = express.Router();
 
-router.post("/signup", signup);
-router.post("/login", login);
+router.post("/signup", rateLimiter, signup);
+router.post("/login", rateLimiter, login);
 
-router.get("/courses", userAuth, getUserCourses);
+router.get("/courses", rateLimiter, userAuth, getUserCourses);
 
 module.exports = router;

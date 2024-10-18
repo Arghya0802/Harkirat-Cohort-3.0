@@ -74,4 +74,39 @@ async function adminAuth(req, res, next) {
     });
   }
 }
-module.exports = { userAuth, adminAuth };
+
+let limitCnt = 0;
+
+async function rateLimiter(req, res, next) {
+  try {
+    if (limitCnt >= 1) {
+      console.log("Too many requests!!!");
+      limitCnt--;
+      return res.status(400).json({
+        message: "Too many requests!!!",
+        success: false,
+      });
+    }
+    console.log("Can call the server!!!");
+    limitCnt++;
+    next();
+
+    // while (limitCnt > 1) {
+    //   console.log(limitCnt);
+    //   limitCnt--;
+    //   return res.status(400).json({
+    //     message: "Too many requests",
+    //     success: false,
+    //   });
+    // }
+    // next();
+  } catch (error) {
+    console.log(error);
+    return res.status(500).json({
+      message: "Internal Server error",
+      success: false,
+    });
+  }
+}
+
+module.exports = { userAuth, adminAuth, rateLimiter };
